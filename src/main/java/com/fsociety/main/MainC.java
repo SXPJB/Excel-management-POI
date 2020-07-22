@@ -9,6 +9,6 @@ public class MainC {
         //CreateFileExcel f=new CreateFileExcel();
         //f.createExcel();
         ReadExcel r=new ReadExcel();
-        r.readExcel();
+         r.readExcel();
     }
 }
