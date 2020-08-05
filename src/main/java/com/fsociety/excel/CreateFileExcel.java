@@ -1,12 +1,16 @@
 package com.fsociety.excel;
 
+import com.fsociety.model.ListPerson;
+import com.fsociety.model.Person;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -54,7 +58,39 @@ public class CreateFileExcel {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
 
+    public void createExcelWhitModel(){
+        String []header={"id","name","First LastName","Second LastName","dateBirth","curp"};
+        XSSFWorkbook whWorkbook=new XSSFWorkbook();
+        Sheet sheet=whWorkbook.createSheet("Person");
+        Row row=sheet.createRow(0);
+        for (int i = 0; i <header.length ; i++) {
+            Cell cell=row.createCell(i);
+            cell.setCellValue(header[i]);
+        }
+        //getAll de jpa repository haciando una llamada a la base de dotos y esto regresa una lista de personas
+        List<Person>listPerson= ListPerson.getAllPerson();
+        int initRow=1;
+        for (Person person:listPerson) {
+            row=sheet.createRow(initRow);
+            row.createCell(0).setCellValue(person.getId());
+            row.createCell(1).setCellValue(person.getName());
+            row.createCell(2).setCellValue(person.getFirstLastName());
+            row.createCell(3).setCellValue(person.getSecondLastName());
+            row.createCell(4).setCellValue(person.getDateBirth());
+            row.createCell(5).setCellValue(person.getCurp());
+            initRow++;
+        }
+        try {
+         FileOutputStream out =new FileOutputStream(new File("E:\\Documents\\Person-whit-model.xlsx"));
+         whWorkbook.write(out);
+         out.close();
+         whWorkbook.close();
+         System.out.println("Person-whit-model.xlsx written successfully on disk.");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }
